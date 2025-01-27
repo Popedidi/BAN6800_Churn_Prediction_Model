@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            background-color: #0078D7;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #005fa3;
+        }
+        .label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center py-6 bg-blue-600 text-white">
+        <h1 class="text-2xl font-bold">Churn Prediction</h1>
+        <p class="text-lg mt-2">Predict customer churn for T-Mobile USA</p>
+    </header>
+
+    <div class="container">
+        <!-- Individual Customer Prediction Form -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Predict for Individual Customer</h2>
+            <form method="POST" action="/predict_individual">
+                <label for="Gender_x_Male" class="label">Gender (0 for Male, 1 for Female):</label>
+                <input type="text" name="Gender" class="input" required>
+
+                <label for="Partner_Yes" class="label">Partner (0 for No, 1 for Yes):</label>
+                <input type="text" name="Partner" class="input" required>
+
+                <label for="Age" class="label">Age:</label>
+                <input type="text" name="Age" class="input" required>
+
+                <label for="Tenure Months" class="label">Tenure Months:</label>
+                <input type="text" name="Tenure Months" class="input" required>
+
+                <label for="Monthly Charges" class="label">Monthly Charge:</label>
+                <input type="text" name="Monthly Charge" class="input" required>
+
+                <label for="Services" class="label">Select Services:</label>
+                <select name="Service" id="Service" class="select" multiple required>
+                    <option value="Phone Service_Yes">Phone Service</option>
+                    <option value="Multiple Lines_No phone service">Multiple Lines</option>
+                    <option value="Internet Service_Fiber optic">INternet Service</option>
+                    <option value="Online Security_Yes">Online Security</option>
+                    <option value="Online Backup_Yes">Online Backup</option>
+                    <option value="Device Protection_Yes">Device Protection</option>
+                    <option value="Tech Support_Yes">Tech Support</option>
+                    <option value="Streaming TV_Yes">Streaming TV</option>
+                    <option value="Streaming Movies_Yes">Streaming Movies</option>
+                    <option value="Contract_Two year">Live Contract</option>
+                </select>
+
+                <button type="submit" class="btn">Predict</button>
+            </form>
+        </section>
+
+        <hr class="border-gray-300 my-8">
+
+        <!-- Batch Prediction Form -->
+        <section>
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Batch Prediction from File</h2>
+            <form method="POST" action="/predict_batch" enctype="multipart/form-data">
+                <label for="file" class="label">Upload CSV File:</label>
+                <input type="file" name="file" class="input" accept=".csv" required>
+                <button type="submit" class="btn">Predict</button>
+            </form>
+        </section>
+
+        <!-- Display Prediction Results or Errors -->
+        <section class="mt-8">
+            {% if prediction %}
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+                    <p class="font-bold">Prediction Result:</p>
+                    <p>{{ prediction }}</p>
+                </div>
+            {% elif predictions %}
+                <div class="overflow-auto">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4">Batch Predictions:</h3>
+                    {{ predictions | safe }}
+                </div>
+            {% elif error %}
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                    <p class="font-bold">Error:</p>
+                    <p>{{ error }}</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+
+    <footer class="text-center py-6 text-gray-600 mt-12">
+        &copy; 2025 T-Mobile USA. All Rights Reserved.
+    </footer>
+</body>
+</html>
