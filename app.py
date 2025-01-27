@@ -73,10 +73,11 @@ def predict_batch():
 
                 data = pd.read_csv(file)
 
-                # Ensure the data has the same features as the model
-                if not all(col in expected_features for col in data.columns):
-                    return render_template('upload.html', error="Uploaded file must contain the following columns: " + ", ".join(expected_features)), 400
-
+                # Create a DataFrame with default values for missing features
+            for feature in expected_features:
+                if feature not in data.columns:
+                    data[feature] = 0  # Set default value for missing features
+                    
                 # Reindex the DataFrame to ensure it has the expected features
                 data = data.reindex(columns=expected_features, fill_value=0)  # Fill missing columns with default values
 
