@@ -6,7 +6,7 @@ import joblib
 app = Flask(__name__)
 
 # Load the trained model
-model = joblib.load('c:/Users/DELL/Python/.venv/model_deployment/Churn_Prediction_Model2.pkl')
+model = joblib.load('Churn_Prediction_Model2.pkl')
 
 # Automatically get expected features if the model supports it
 if hasattr(model, 'feature_names_in_'):
@@ -93,4 +93,4 @@ def predict_batch():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
