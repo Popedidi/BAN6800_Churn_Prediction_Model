@@ -74,10 +74,10 @@ def predict_batch():
                 data = pd.read_csv(file)
 
                 # Create a DataFrame with default values for missing features
-            for feature in expected_features:
-                if feature not in data.columns:
-                    data[feature] = 0  # Set default value for missing features
-                    
+                for feature in expected_features:
+                    if feature not in data.columns:
+                        data[feature] = 0  # Set default value for missing features
+
                 # Reindex the DataFrame to ensure it has the expected features
                 data = data.reindex(columns=expected_features, fill_value=0)  # Fill missing columns with default values
 
